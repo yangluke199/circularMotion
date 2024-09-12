@@ -1,27 +1,25 @@
 from manim import *
 
-class AcceleratingBall(MovingCameraScene):
+class ProjectileMotion(Scene):
     def construct(self):
-        # Create the ball
-        ball = Dot(color=BLUE).move_to(LEFT * 5 + UP * 10)  # Start the ball on the top left
-        self.play(self.camera.frame.animate.scale(5))
-        # Initial velocities for both axes
-        ball.velocity_x = 0.5  # Horizontal velocity (in units per second)
-        ball.velocity_y = 0  # Vertical velocity (in units per second)
+        # Constants for the motion
+        initial_velocity_x = 4   # Initial horizontal velocity
+        initial_velocity_y = 5   # Initial vertical velocity
+        g = 9.8  # Gravitational acceleration
 
-        # Accelerations for both axes
-        acceleration_x = 0  # Horizontal acceleration (in units per second^2)
-        acceleration_y = -6  # Vertical acceleration (gravity in units per second^2)
+        # Create the ball as a dot or small circle
+        ball = Dot(radius=0.2, color=BLUE)
+        ball.move_to(ORIGIN)  # Start at the origin
 
-        # Define the updater function for horizontal and vertical movement
+        # Create a ValueTracker to track time
+        time_tracker = ValueTracker(0)
+
+        # Define a function to update the ball's position
         def update_ball(ball):
-            # Update the horizontal velocity and position
-            ball.velocity_x += acceleration_x  # Increase horizontal velocity
-            ball.shift(RIGHT * ball.velocity_x )  # Move based on horizontal velocity
-
-            # Update the vertical velocity and position
-            ball.velocity_y += acceleration_y   # Increase vertical velocity (gravity)
-            ball.shift(UP * ball.velocity_y )  # Move based on vertical velocity
+            t = time_tracker.get_value()
+            new_x = initial_velocity_x * t  # Horizontal displacement
+            new_y = initial_velocity_y * t - 0.5 * g * t**2  # Vertical displacement
+            ball.move_to(np.array([new_x, new_y, 0]))  # Update ball's position
 
         # Attach the updater to the ball
         ball.add_updater(update_ball)
@@ -29,8 +27,8 @@ class AcceleratingBall(MovingCameraScene):
         # Add the ball to the scene
         self.add(ball)
 
-        # Wait to observe the animation for 5 seconds
-        self.wait(5)
+        # Animate the ValueTracker to simulate time passing (projectile motion)
+        self.play(time_tracker.animate.set_value(2), run_time=2, rate_func=linear)
 
-        # Remove the updater after the animation
+        # Stop the updater once the animation is done
         ball.clear_updaters()
