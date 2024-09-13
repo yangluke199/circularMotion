@@ -1,0 +1,3 @@
+# This file is used internally by FFMPEG.
+file 'file:/Users/luke/Desktop/circularMotion/circularMotion/media/videos/viewingTest/2160p60/partial_movie_files/RotatingArrowWithLabel/1457378895_153263083_146878552.mp4'
+file 'file:/Users/luke/Desktop/circularMotion/circularMotion/media/videos/viewingTest/2160p60/partial_movie_files/RotatingArrowWithLabel/1993220219_1704852926_608279995.mp4'
